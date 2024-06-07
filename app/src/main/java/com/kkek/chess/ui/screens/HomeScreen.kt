@@ -46,7 +46,7 @@ fun HomeScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
-                title = { Text("Large TopAppBar", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                title = { Text("Chess", maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 navigationIcon = {
                     IconButton(onClick = { /* doSomething() */ }) {
                         Icon(
