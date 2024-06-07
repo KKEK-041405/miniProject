@@ -6,7 +6,7 @@ import com.kkek.chess.model.PieceColor
 
 data class GameUiState(
     var isGameOver: Boolean = false,
-    val Game: Chessboard = Chessboard(),
+    var Game: Chessboard = Chessboard(),
     var turn: PieceColor,
     var isSignedIn: Boolean = false
 )

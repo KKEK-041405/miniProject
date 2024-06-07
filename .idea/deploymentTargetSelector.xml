@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-25T06:06:45.057442300Z">
+        <DropdownSelection timestamp="2024-05-26T07:31:09.418088800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=Z9VGX8AUUONFNVDQ" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=I795PRTKT8TGT4EU" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,16 +15,13 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="FirebaseDirectAccess" identifier="reservation=projects/kkek-7169b/deviceSessions/session-rhmlxicls8bua" />
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=Z9VGX8AUUONFNVDQ" />
               </handle>
-              <template>
-                <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=husky/34" />
-              </template>
             </Target>
             <Target type="DEFAULT_BOOT">
-              <template>
-                <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=lynx/33" />
-              </template>
+              <handle>
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=I795PRTKT8TGT4EU" />
+              </handle>
             </Target>
           </targets>
         </DialogSelection>

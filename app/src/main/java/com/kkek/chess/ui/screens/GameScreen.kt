@@ -1,4 +1,4 @@
-package com.kkek.chess.ui
+package com.kkek.chess.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -32,6 +32,7 @@ import com.kkek.chess.model.Piece
 import com.kkek.chess.model.PieceColor
 import com.kkek.chess.model.PieceType
 import com.kkek.chess.model.Square
+import com.kkek.chess.ui.GameViewModel
 
 
 @SuppressLint("StateFlowValueCalledInComposition")

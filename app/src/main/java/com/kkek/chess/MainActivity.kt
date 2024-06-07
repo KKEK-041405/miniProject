@@ -19,15 +19,17 @@ import androidx.compose.ui.Modifier
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.kkek.chess.ui.GameScreen
+import com.kkek.chess.ui.screens.GameScreen
 import com.kkek.chess.ui.GameViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kkek.chess.ui.LoginScreen
-import com.kkek.chess.ui.SignUpScreen
+import com.kkek.chess.ui.GameMode
+import com.kkek.chess.ui.screens.HomeScreen
+import com.kkek.chess.ui.screens.LoginScreen
+import com.kkek.chess.ui.screens.SignUpScreen
 import com.kkek.chess.ui.theme.ChessTheme
 
 enum class ChessAppScreen {
@@ -61,6 +63,7 @@ fun ChessApp(
         innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
         val startDestination = if (viewModel.auth.currentUser != null) ChessAppScreen.Game.name else ChessAppScreen.Login.name
+        val currentScreen = navController.currentBackStackEntry?.destination?.route
         NavHost(
             navController = navController,
             startDestination = startDestination,
@@ -71,7 +74,9 @@ fun ChessApp(
                     onLoginSuccess = {
                                      navController.navigate(ChessAppScreen.Home.name)
                     },
-                    onLoginFailed = {},
+                    onLoginFailed = {
+
+                    },
                     onSignUp = {
                                navController.navigate(ChessAppScreen.Login.name)
                     },
@@ -108,20 +113,7 @@ fun ChessApp(
     }
 }
 
-@Composable
-fun HomeScreen(
-    onGameStart: () -> Unit,
-    gameViewModel: GameViewModel
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = onGameStart) {
-            Text(text = "PlayGame")
-        }
-    }
-}
+
 
 
 

@@ -1,17 +1,23 @@
 package com.kkek.chess.ui
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.kkek.chess.ChessAppScreen
+import com.kkek.chess.model.Chessboard
 import com.kkek.chess.model.PieceColor
 import com.kkek.chess.model.Square
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.annotation.meta.When
 
 class GameViewModel: ViewModel() {
     var isDBConnected: Boolean = false
@@ -21,7 +27,7 @@ class GameViewModel: ViewModel() {
     private val DB = Firebase.database.reference
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
     var PlayerTurn = PieceColor.WHITE
-    private val GameID = ""
+    private val GameID = "Game"
 
     fun resetGame() {
         _uiState.value = GameUiState(turn = PieceColor.WHITE)
@@ -32,7 +38,6 @@ class GameViewModel: ViewModel() {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     isLogged = true
-                    ConnectToDB()
                     onLoginSuccess()
                     uiState.value.isSignedIn = true
                 }
@@ -62,10 +67,51 @@ class GameViewModel: ViewModel() {
     }
 
     fun UpdateMoveINDB(value: Square, square: Square) {
-        DB.child(GameID).child("Move").child("${value.row}${value.col}").setValue("${square.row}${square.col}")
+        DB.child(GameID).child("Moves").child("${value.row}${value.col}").setValue("${square.row}${square.col}")
+    }
+    fun GetMovesFromDB() {
+        DB.child(GameID).child("Moves").addChildEventListener(
+            object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val to = snapshot.value.toString()
+                    val row = to[0].digitToInt()
+                    val col = to[1].digitToInt()
+                    val square = uiState.value.Game.board[row][col]
+                    val from = snapshot.key.toString()
+                    val fromRow = from[0].digitToInt()
+                    val fromCol = from[1].digitToInt()
+                    val fromSquare = uiState.value.Game.board[fromRow][fromCol]
+                    uiState.value.Game.movePiece(fromSquare,square)
+                    Log.d("Snapshot", snapshot.value.toString())
+                    Log.d("PreviousChildName", previousChildName.toString())
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+
+            }
+        )
     }
 
-    fun ConnectToDB() {
+    fun ConnectToDB(
+        Player1: String,
+        Player2: String
+    ) {
+        DB.child(GameID).child("Player1").setValue(Player1)
        DB.child("Game").child("Player1").get().addOnSuccessListener {
            if (it.value == "") {
                DB.child("Game").child("Player1").setValue(auth.currentUser?.uid.toString())
@@ -82,5 +128,24 @@ class GameViewModel: ViewModel() {
                }
            }
        }
+        GetMovesFromDB()
+    }
+
+    fun CreateGame(
+        Player1: String = "",
+        Player2: String = "",
+        SelectedGameMode: GameMode,
+        onGameCreated: () -> Unit
+
+    ){
+        when(SelectedGameMode){
+            GameMode.Online ->{
+
+            }
+            GameMode.Offline -> {
+                uiState.value.Game = Chessboard()
+                onGameCreated()
+            }
+        }
     }
 }
